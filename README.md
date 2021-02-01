@@ -4,7 +4,7 @@ This project contains a express server and client files with HTML and JavaScript
 ## Author
 tan00081
 
-##Usage
+## Usage
 
 ```bash
 node index.js
