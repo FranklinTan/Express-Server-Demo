@@ -1,0 +1,58 @@
+﻿<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+     	<div class="container-fluid">
+        <ul class="nav navbar-nav">
+          <li><a href="/"><b>Home</b></a></li>
+          <li><a href="/events"><b>Events</b></a></li>
+          <li><a href="/addEvent"><b>Add Event</b></a></li>
+          <li><a href="/stock"><b>Stock Page</b></a></li>
+          <li><a href="/admin"><b>Admin</b></a></li>
+          <li><a href="/logout">
+            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+          </a></li>
+        </ul>
+    	</div>
+  	</nav>
+    <br><br>
+
+    <div class="container">
+      <table class="table" id="eventsTable">
+        <thead>
+          <tr>
+            <th scope="col">Day</th>
+            <th scope="col">Event</th>
+            <th scope="col">Time</th>
+            <th scope="col">Event Location <br> (Virtual or Physical) </th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Extra Info <br> (URL) </th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <a id="test"></a>
+    </div>
+    <script type="text/javascript">
+      $.get("/getListOfEvents", function(data){
+        addEvents(data);
+      });
+
+      function addEvents(events) {
+        var eventInfo = "";
+        var i;
+        for (i = 0; i < events.length; i++) {
+          eventInfo = '<tr><td>' + events[i].event_day + '</td>' + '<td>' + events[i].event_event + '</td>' + '<td>' + events[i].event_start + ' ' + events[i].event_end + '</td>' + '<td>' + events[i].event_phone + '</td>' + '<td>' + events[i].event_location + '</td>' +
+          '<td><a' + ' href="' + events[i].event_url + '">' + events[i].event_url + '<a></td></tr>';
+          var newEvent = $("#eventsTable").find('tbody').append(eventInfo);
+        }
+      }
+    </script>
+  </body>
+</html>

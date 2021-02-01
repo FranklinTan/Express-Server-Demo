@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+    <head>
+    	<meta charset="utf-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="crossorigin="anonymous"></script>
+	    <title>Login.js</title>
+	    <style type="text/css">
+            .jumbotron { text-align: center; }
+          </style>
+    </head>
+
+    <body>
+        <div class="jumbotron" style="background: DarkSeaGreen !important">
+            <h1>Login Page</h1>
+            <p>Please enter your username and password, Both are case sensitive</p>
+            <br/>
+            <br/>
+        </div>
+
+        <div>
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <p id="alertbox" style="width:100%; margin:auto; text-align:center; background-color:rgb(235, 175, 175); color:rgb(175, 71, 71)"></p>
+                <form id="login" name="login">
+                    <tr><label>User:</label></br></tr>
+                    <tr><input type="text" id="username" name="username" placeholder="Username" required style="width:100%; margin-bottom:10px;"></br></tr>
+                    <tr><label>Password:</label></br></tr>
+                    <tr><input type="text" id="password" name="password" placeholder="Password" required style="width:100%; margin-bottom:10px;"></br>
+                    <tr><input type="submit" value="Login" class="btn btn-primary btn-block"></tr>
+                </form>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </body>
+
+    <script>
+        $(document).ready(function () {
+            $('#login').submit(function (credential) {
+                credential.preventDefault();
+                let username= $('#username').val();
+                let password= $('#password').val();  
+                $.post('/sendLoginDetails',
+                    {"username": username, "password": password},
+                    (data) => {
+                        console.log(data);
+                    if (data.status === 'success') {
+                        console.log("Logged in");
+                        window.location.href = '/events';
+                    } else {
+                        $('#alertbox').html("Invalid credentials, please try again!")
+                        console.log("Login Failed"); // display error on html
+                    }
+                });
+            });
+        });
+    </script>
+</html>

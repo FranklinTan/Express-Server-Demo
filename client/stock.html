@@ -1,0 +1,125 @@
+﻿<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+      textarea {
+          width: 100%;
+          min-height: 30rem;
+          background-color: black;
+          font-family: "Lucida Console", Monaco, monospace;
+          font-size: 0.75 rem;
+          line-height: 1.2;
+          color: #fff;
+      }
+
+      #time {
+        height: 300px;
+        width: 550px;
+        background-color: black;
+        color: white;
+      }
+
+      #meta {
+        height: 300px;
+        width: 550px;
+        background-color: black;
+        color: white;
+      }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+   	<div class="container-fluid">
+      <ul class="nav navbar-nav">
+        <li><a href="/" class="tag"><b>Home</b></a></li>
+        <li><a href="/events" class="tag"><b>Events</b></a></li>
+        <li><a href="/addEvent" class="tag"><b>Add Event</b></a></li>
+        <li><a href="/stock" class="tag"><b>Stock Page</b></a></li>
+        <li><a href="/admin"><b>Admin</b></a></li>
+        <li><a href="/logout">
+          <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+        </a></li>
+      </ul>
+  	</div>
+	</nav>
+  <br><br>
+
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-body"><center>Welcome to Stock Page</center></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <table class="table table-bordered table-hover">
+          <tbody>
+            <tr>
+              <td class="col-md-6">Company</td>
+              <td class="col-md-6">
+                <div class="form-group">
+                  <select name="Company">
+                    <option value="MSFT">Microsoft</option>
+                    <option value="BA">Boeing Company</option>
+                    <option value="AAPL">Apple Inc</option>
+                    <option value="AMZN">Amazon</option>
+                    <option value="NVDA">NVIDIA Corporation</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <button type="button">Get Data</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <table class="table" id="StockData">
+      <thead>
+        <tr>
+          <th scope="col">Company-MetaData</th>
+          <th scope="col">Stock-Info</th>
+        </tr>
+        <tr>
+          <td class= "stock"><pre id="meta"></pre></td>>
+          <td class= "stock"><pre id="time"></pre></td>>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    // TODO: Hit the TIME_SERIES_DAILY endpoint of the alphavantage API for the company that was selected in the dropdown. Display the JSON data as shown in the writeup.
+    $(":button").click(function (){
+      var company = $('select[name="Company"]').val()
+      var xmlhttp = new XMLHttpRequest();
+      const url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=' + company + '&interval=1min&apikey=EJ7YIIGS0AJVUE1K';
+      xmlhttp.open('GET', url, true);
+      xmlhttp.onerror = function(xmlhttp) {console.log('error:', xmlhttp);};
+      xmlhttp.send();
+      xmlhttp.onload = function() {
+        let data = xmlhttp.responseText;
+        const stockData = JSON.parse(data);
+        // console.log(stockData["Meta Data"]);
+        // console.log(stockData["Time Series (1min)"]);
+        $("#meta").html(JSON.stringify(stockData["Meta Data"], null, 4));
+        $("#time").html(JSON.stringify(stockData["Time Series (1min)"], null, 4));
+      };
+    });
+  </script>
+</body>
+</html>
